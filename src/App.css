@@ -1702,3 +1702,51 @@ html {
     height: 200px;
   }
 }
+
+
+/* ===== Product Availability Badge ===== */
+
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.availability::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.availability.in-stock {
+  background: linear-gradient(110deg, #f1e3ff, #e4d4ff);
+  color: #5b2d8e;
+  border: 1px solid #cfb4f2;
+}
+
+.availability.in-stock::before {
+  background: #a45bc4;
+  box-shadow: 0 0 8px rgba(164, 91, 196, 0.6);
+}
+
+.availability.no-stock {
+  background: linear-gradient(110deg, #ffe3e3, #ffd6cc);
+  color: #a52d3a;
+  border: 1px solid #f2b3b3;
+}
+
+.availability.no-stock::before {
+  background: #e75b78;
+}
+
+.product-card.out-of-stock .product-image img {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}

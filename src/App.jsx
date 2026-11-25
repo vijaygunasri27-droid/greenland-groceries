@@ -205,17 +205,27 @@ function App() {
       {categoryProducts.length > 0 ? (
         <div className="product-grid">
           {categoryProducts.map((product) => (
-            <article className="product-card" key={product.id}>
-              <div className="product-image">
+<article
+  className={`product-card ${product.isAvailable ? '' : 'out-of-stock'}`}
+  key={product.id}
+>              <div className="product-image">
                 <img src={product.image} alt={product.name} />
               </div>
 
-              <div className="product-info">
+                            <div className="product-info">
                 <h3>{product.name}</h3>
                 <p>{product.tamilName}</p>
-{product.quantity && (
-  <span>{product.quantity}</span>
-)}              </div>
+                {product.quantity && (
+                  <span>{product.quantity}</span>
+                )}
+                <div
+                  className={`availability ${
+                    product.isAvailable ? 'in-stock' : 'no-stock'
+                  }`}
+                >
+                  {product.isAvailable ? 'Available' : 'Out of stock'}
+                </div>
+              </div>
             </article>
           ))}
         </div>
