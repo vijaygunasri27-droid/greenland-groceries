@@ -1,67 +1,56 @@
-
+import { useEffect, useState } from 'react'
 import './App.css'
-import { products } from './products'
-
-const categories = [
-  {
-    name: 'Rice & Grains',
-    slug: 'rice-grains',
-    tamilName: 'அரிசி மற்றும் தானியங்கள்',
-    detail: 'Everyday essential staples',
-    image: '/categories/rice-grains.jpg',
-  },
-  {
-    name: 'Flour & Atta',
-    slug: 'flour-atta',
-    tamilName: 'மாவு வகைகள்',
-    detail: 'Flour for every kitchen',
-    image: '/categories/flour-atta.jpeg',
-  },
-  {
-    name: 'Pulses & Lentils',
-    slug: 'pulses-lentils',
-    tamilName: 'பருப்பு வகைகள்',
-    detail: 'A variety of pantry staples',
-    image: '/categories/pulses-lentils.jpg',
-  },
-  {
-    name: 'Spices & Masalas',
-    slug: 'spices-masalas',
-    tamilName: 'மசாலா வகைகள்',
-    detail: 'Flavour for every kitchen',
-    image: '/categories/spices-masalas.jpeg',
-  },
-  {
-    name: 'Oils & Ghee',
-    slug: 'oils-ghee',
-    tamilName: 'எண்ணெய் மற்றும் நெய்',
-    detail: 'Everyday cooking essentials',
-    image: '/categories/oils-ghee.webp',
-  },
-  {
-    name: 'Beverages',
-    slug: 'beverages',
-    tamilName: 'பானங்கள்',
-    detail: 'Drinks for every occasion',
-    image: '/categories/beverages.jpeg',
-  },
-  {
-    name: 'Snacks & Sweets',
-    slug: 'snacks-sweets',
-    tamilName: 'தின்பண்டங்கள் மற்றும் இனிப்புகள்',
-    detail: 'A range of treats',
-    image: '/categories/snacks-sweets.jpg',
-  },
-  {
-    name: 'Sauces & More',
-    slug: 'sauces-more',
-    tamilName: 'சாஸ் மற்றும் இதர பொருட்கள்',
-    detail: 'More kitchen essentials',
-    image: '/categories/sauces-more.png',
-  },
-]
+import { supabase } from './supabaseClient'
 
 function App() {
+  const [categories, setCategories] = useState([])
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    async function loadData() {
+      const { data: categoryData, error: categoryError } = await supabase
+        .from('categories')
+        .select('*')
+        .order('sort_order')
+
+      const { data: productData, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .order('sort_order')
+
+      if (categoryError || productError) {
+        console.error('Supabase error:', categoryError || productError)
+        return
+      }
+
+      setCategories(
+        categoryData.map((c) => ({
+          id: c.id,
+          name: c.name,
+          slug: c.slug,
+          tamilName: c.name_tamil,
+          detail: c.detail,
+          image: c.image_url,
+        }))
+      )
+
+      setProducts(
+        productData.map((p) => ({
+          id: p.id,
+          categoryId: p.category_id,
+          name: p.name,
+          tamilName: p.name_tamil,
+          image: p.image_url,
+          quantity: p.quantity,
+          isAvailable: p.is_available,
+        }))
+      )
+    }
+
+    loadData()
+  }, [])
+
+
   return (
     <div className="website">
       <div className="announcement">
@@ -200,7 +189,7 @@ function App() {
 
   {categories.map((category) => {
   const categoryProducts = products.filter(
-    (product) => product.category === category.name
+    (product) => product.categoryId === category.id
   )
 
   return (
