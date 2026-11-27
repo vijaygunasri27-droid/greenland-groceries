@@ -16,7 +16,7 @@
 }
 
 .header {
-  min-height: 85px;
+  min-height: 85px; 
   padding: 14px 7%;
   display: flex;
   align-items: center;
@@ -1749,4 +1749,60 @@ html {
 .product-card.out-of-stock .product-image img {
   opacity: 0.5;
   filter: grayscale(0.6);
+}
+/* Greenland Groceries Hero Advertisement Video */
+
+.hero-art {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 365px;
+  border-radius: 12px;
+  background: linear-gradient(140deg, #f9d9cb, #e9dafa 55%, #ffe6c9);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 18px 50px rgba(112, 69, 105, 0.12);
+}
+
+.hero-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.hero-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 13px 22px;
+  border: none;
+  border-radius: 30px;
+  background: #ffffff;
+  color: #6b3c75;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.hero-play-button:hover {
+  background: #6b3c75;
+  color: #ffffff;
+}
+
+@media (max-width: 800px) {
+  .hero-art {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 500px) {
+  .hero-art {
+    min-height: 285px;
+  }
 }

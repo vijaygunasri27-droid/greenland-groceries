@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { supabase } from './supabaseClient'
 
 function App() {
+  const videoRef = useRef(null)
+const [showPlayButton, setShowPlayButton] = useState(false)
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
 
@@ -20,6 +22,25 @@ function App() {
 
       if (categoryError || productError) {
         console.error('Supabase error:', categoryError || productError)
+        useEffect(() => {
+  const video = videoRef.current
+
+  if (!video) return
+
+  video.play().catch(() => {
+    setShowPlayButton(true)
+  })
+}, [])
+
+const handleVideoPlay = () => {
+  const video = videoRef.current
+
+  if (video) {
+    video.play()
+      .then(() => setShowPlayButton(false))
+      .catch(() => setShowPlayButton(true))
+  }
+}
         return
       }
 
@@ -113,19 +134,40 @@ function App() {
             </div>
           </div>
 
-          <div className="hero-art" aria-label="Grocery illustration" role="img">
-            <div className="art-circle"></div>
-            <div className="art-label">GOOD FOOD, GOOD BUSINESS</div>
-            <div className="grocery-bag">
-              <span>GG</span>
-              <small>GREENLAND<br />GROCERIES</small>
-            </div>
-            <div className="floating-item item-one">🌾</div>
-            <div className="floating-item item-two">🥫</div>
-            <div className="floating-item item-three">🌶️</div>
-            <div className="floating-item item-four">🫘</div>
-            <div className="art-caption">Your everyday essentials, all in one place.</div>
-          </div>
+          <div className="hero-art">
+  <video
+    ref={videoRef}
+    className="hero-video"
+    src="/videos/greenland-ad.mp4"
+    autoPlay
+    muted
+    playsInline
+    preload="auto"
+onEnded={(e) => {
+  const video = e.currentTarget
+  video.pause()
+  video.currentTime = Math.max(0, video.duration - 2)
+}}
+   onError={() => setShowPlayButton(true)}
+  />
+
+  {showPlayButton && (
+    <button
+      className="hero-play-button"
+      onClick={() => {
+  const video = videoRef.current
+  if (video) {
+    video.play()
+      .then(() => setShowPlayButton(false))
+      .catch(() => setShowPlayButton(true))
+  }
+}}
+      type="button"
+    >
+      ▶ Play Advertisement
+    </button>
+  )}
+</div>
         </section>
 
         <section className="benefits" aria-label="Our service">
